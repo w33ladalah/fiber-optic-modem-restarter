@@ -20,19 +20,19 @@ const main = async () => {
 	await page.type('input#Frm_Password', MODEM_PASSWORD, { delay: 10 });
 	await page.click('input#LoginId');
 
-	await page.waitForTimeout(5000);
+	await page.waitForTimeout(1000);
 	await page.waitForSelector('iframe[src*="template.gch"]', { timeout: 3000 });
 
 	const frameHandle = await page.$('iframe[src="template.gch"]');
 	const frame = await frameHandle.contentFrame();
 
 	await frame.click('tr[onclick="javascript:openLink(\'getpage.gch?pid=1002&nextpage=net_tr069_basic_t.gch\')"]');
-	await frame.waitForTimeout(1000);
+	await frame.waitForTimeout(500);
 	await frame.click('tr[onclick=\'javascript:OnMenuItemClick("mmManager","smSysMgr"); openLink("getpage.gch?pid=1002&nextpage=manager_dev_conf_t.gch")\']');
-	await frame.waitForTimeout(1000);
-	await frame.click('input[value="Reboot"]');
-	await frame.waitForTimeout(1000);
-	await frame.click('input[value="Confirm"]');
+	await frame.waitForTimeout(500);
+	// await frame.click('input[value="Reboot"]');
+	// await frame.waitForTimeout(500);
+	// await frame.click('input[value="Confirm"]');
 
 	await page.waitForTimeout(2000);
 }
