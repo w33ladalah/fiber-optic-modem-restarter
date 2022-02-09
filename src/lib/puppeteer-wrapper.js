@@ -35,13 +35,17 @@ export class PuppeteerWrapper {
         }
 
         const args = [];
-        const width = Math.ceil(Math.random() * (1366 - 500) + 500);
-        const height = Math.ceil(Math.random() * (768 - 300) + 300);
+
+        let width = 800;
+        let height = 600;
+        if (this._options.randomizeBrowserDimension === true) {
+            width = Math.ceil(Math.random() * (1366 - 500) + 500);
+            height = Math.ceil(Math.random() * (768 - 300) + 300);
+        }
 
         args.push(`--window-size=${width},${height}`);
         args.push('--no-sandbox');
-
-        puppeteer.use(StealthPlugin());
+        args.push('--disable-features=site-per-process');
 
         this._logger.logInfo("Setting up puppeteer...");
         this.browser = await puppeteer.launch({

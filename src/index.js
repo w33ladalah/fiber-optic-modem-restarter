@@ -7,8 +7,53 @@ import { MODEM_URL, MODEM_USER, MODEM_PASSWORD } from './config';
 //#region Setup - Dependency Injection-----------------------------------------------
 const _logger = new Logger();
 const _filePaths = new FilePaths(_logger, "modem-restarter");
-const _puppeteerConfig = { headless: true, args: ['--lang=en-EN,en'] };
+const _puppeteerConfig = { headless: false, args: ['--disable-features=site-per-process'] };
 const _puppeteerWrapper = new PuppeteerWrapper(_logger, _filePaths, _puppeteerConfig);
 //#endregion
 
-console.log([MODEM_URL, MODEM_USER, MODEM_PASSWORD]);
+const main = async () => {
+	const page = await _puppeteerWrapper.newPage();
+	const loginUrl = MODEM_URL;
+
+	await page.goto(loginUrl);
+	await page.type('input#Frm_Username', MODEM_USER, { delay: 10 });
+	await page.type('input#Frm_Password', MODEM_PASSWORD, { delay: 10 });
+	await page.click('input#LoginId');
+
+	// await page.waitForNavigation({waitUntil: 'networkidle2'});
+	await page.waitForSelector('iframe[src*="template.gch"]', { timeout: 3000 });
+
+	// const frame = page.frames().find(async (frame) => {
+	// 	console.log(await frame.click('tr.h1_s[onclick^="javascript:openLink"]'))
+	// });
+
+	const frameHandle = await page.$('iframe[src="template.gch"] ');
+	const frame = await frameHandle.contentFrame();
+	console.log(await frame.title());
+
+	// await frame.type(); //('tr.h1_s[onclick]');
+
+	await page.waitForTimeout(20000);
+}
+
+(async () => {
+	try {
+		const chromeSet = await _puppeteerWrapper.setup();
+		if (!chromeSet) {
+			console.error("Chrome not found!");
+		} else {
+			console.log(_puppeteerWrapper._getSavedPath());
+		}
+
+		await main();
+	} catch (e) {
+		_logger.logError('Thrown error:');
+		_logger.logError(e);
+
+		process.exit(1);
+	} finally {
+		await _puppeteerWrapper.cleanup();
+	}
+
+	console.log('Done. Close application process.');
+})();
