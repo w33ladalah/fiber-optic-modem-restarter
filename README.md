@@ -1,4 +1,4 @@
-# Internet Modem Restarter (Telkom Indihome)
+# Fiber Optic Modem Restarter (Telkom Indihome)
 
 Command line application to restart fiber optic modem. Currently only support **Telkom Indihome** modem with type **ZTE F609**. Other modem type does not supported yet.
 
@@ -12,5 +12,5 @@ Command line application to restart fiber optic modem. Currently only support **
 	MODEM_PASSWORD="<MODEM_PASSWORD>"
 
 4. Run: *$ npm install* or *$ yarn*.
-5. And, finally: *$ npm run start*.
+5. And, finally: *$ npm run start* or *yarn start*.
 6. Done!
