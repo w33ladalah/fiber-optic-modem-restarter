@@ -20,20 +20,23 @@ const main = async () => {
 	await page.type('input#Frm_Password', MODEM_PASSWORD, { delay: 10 });
 	await page.click('input#LoginId');
 
-	// await page.waitForNavigation({waitUntil: 'networkidle2'});
+	await page.waitForTimeout(5000);
 	await page.waitForSelector('iframe[src*="template.gch"]', { timeout: 3000 });
 
-	// const frame = page.frames().find(async (frame) => {
-	// 	console.log(await frame.click('tr.h1_s[onclick^="javascript:openLink"]'))
-	// });
-
-	const frameHandle = await page.$('iframe[src="template.gch"] ');
+	const frameHandle = await page.$('iframe[src="template.gch"]');
 	const frame = await frameHandle.contentFrame();
-	console.log(await frame.title());
+	const frameContent = await frame.content();
+	console.log(frameContent.includes('net_tr069_basic_t'));
 
-	// await frame.type(); //('tr.h1_s[onclick]');
+	await frame.click('tr[onclick="javascript:openLink(\'getpage.gch?pid=1002&nextpage=net_tr069_basic_t.gch\')"]');
+	await frame.waitForTimeout(1000);
+	await frame.click('tr[onclick=\'javascript:OnMenuItemClick("mmManager","smSysMgr"); openLink("getpage.gch?pid=1002&nextpage=manager_dev_conf_t.gch")\']');
+	await frame.waitForTimeout(1000);
+	await frame.click('input[value="Reboot"]');
+	await frame.waitForTimeout(1000);
+	await frame.click('input[value="Confirm"]');
 
-	await page.waitForTimeout(20000);
+	await page.waitForTimeout(2000);
 }
 
 (async () => {
