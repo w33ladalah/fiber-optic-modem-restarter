@@ -25,8 +25,6 @@ const main = async () => {
 
 	const frameHandle = await page.$('iframe[src="template.gch"]');
 	const frame = await frameHandle.contentFrame();
-	const frameContent = await frame.content();
-	console.log(frameContent.includes('net_tr069_basic_t'));
 
 	await frame.click('tr[onclick="javascript:openLink(\'getpage.gch?pid=1002&nextpage=net_tr069_basic_t.gch\')"]');
 	await frame.waitForTimeout(1000);
