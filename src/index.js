@@ -30,9 +30,9 @@ const main = async () => {
 	await frame.waitForTimeout(500);
 	await frame.click('tr[onclick=\'javascript:OnMenuItemClick("mmManager","smSysMgr"); openLink("getpage.gch?pid=1002&nextpage=manager_dev_conf_t.gch")\']');
 	await frame.waitForTimeout(500);
-	// await frame.click('input[value="Reboot"]');
-	// await frame.waitForTimeout(500);
-	// await frame.click('input[value="Confirm"]');
+	await frame.click('input[value="Reboot"]');
+	await frame.waitForTimeout(500);
+	await frame.click('input[value="Confirm"]');
 
 	await page.waitForTimeout(2000);
 }
